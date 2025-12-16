@@ -1,17 +1,26 @@
-import React, { HTMLAttributes, ReactNode, useState } from "react";
+import React, { HTMLAttributes, ReactNode, useCallback, useRef } from "react";
 import MessageFormat from "./format";
+import { Menu, MenuItem } from "./action_menu";
+import { useActionMenuOperation, useClickFocus } from "@/hooks/useHooks";
+import { useLiveLink } from "@/context/LiveLinkContext";
 import { AuthUser, Message } from "@/types";
 import { OnMessageSeen } from "@/helper/jsxhelper";
 
-
 interface MessageUIProps extends HTMLAttributes<HTMLDivElement> {
   msg: Message;
-  selectId: string;
   authUser: AuthUser;
   children?: ReactNode;
 }
 export const MessageUI = React.memo(
-  ({ msg, selectId, children, authUser, ...props }: MessageUIProps) => {
+  ({ msg, children, authUser, ...props }: MessageUIProps) => {
+    const focusRef = useRef<HTMLDivElement | null>(null);
+    const { id, setId, onSelect, setOnSelect } = useLiveLink();
+    const area = useClickFocus(focusRef);
+    const { handleOperation, result } = useActionMenuOperation();
+
+    const actionMenuHandler = (value: string) => {
+      handleOperation(value, msg.customId, msg.chatId, public_id);
+    };
     if (!msg) return null;
 
     let parsed;
@@ -21,11 +30,12 @@ export const MessageUI = React.memo(
       return <p className="text-red-500">Invalid message</p>;
     }
 
-    const { format, url, message } = parsed;
-
-    // ---- FILE MESSAGES ----
+    const { format, url, message, public_id } = parsed;
 
     // ---- main return statement ----
+
+    // your Redux store
+
     return (
       <div
         className={`flex w-full mt-2   ${
@@ -33,37 +43,42 @@ export const MessageUI = React.memo(
         }`}
       >
         <div
+          ref={focusRef}
           {...props}
-          className={` flex flex-col w-fit relative ${
+          className={`pr-5 flex flex-col w-fit relative   ${
             msg.senderId === authUser?.uid
               ? `${
-                  url
-                    ? "bg-transparent space-y-2"
-                    : " bg-pattern_7 px-3 py-1"
+                  url ? "bg-transparent space-y-2" : " bg-pattern_7 px-3 py-1"
                 } justify-end  rounded-bl-2xl`
               : `${
-                  url
-                    ? "bg-transparent space-y-2"
-                    : " bg-pattern_3 px-3 py-1"
+                  url ? "bg-transparent space-y-2" : " bg-pattern_3 px-3 py-1"
                 } justify-start  rounded-br-2xl`
           }`}
         >
-          <div
-            className={` w-full    ${
-              msg.senderId === authUser?.uid
-                ? "top-0  justify-end translate-x-8"
-                : "top-0 justify-start translate-x-0"
-            }`}
-          >
-           
-          </div>
           {children}
           <MessageFormat
+            info={result.message}
             id={msg.customId ?? ""}
             format={format}
             url={url}
             message={message}
           />
+          {area !== "OutSide" && (
+            <Menu
+              id={id}
+              setId={setId}
+              msg={msg}
+              onSelect={actionMenuHandler}
+              condition={authUser.uid === msg.senderId}
+            >
+              <MenuItem value="Reply" />
+              <MenuItem value="Copy" />
+              <MenuItem value="Forward" />
+              <MenuItem value="Delete" />
+              <MenuItem value="Report" />
+            </Menu>
+          )}
+
           <div className="flex items-end gap-2">
             <p className="text-[10px] text-pattern_4">
               {msg.createdAt

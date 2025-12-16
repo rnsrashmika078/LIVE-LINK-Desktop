@@ -1,22 +1,30 @@
 "use client";
-import { store } from "@/app/lib/redux/store";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React, { ReactNode } from "react";
 import { Provider } from "react-redux";
 import GlobalPusherListener from "./GlobalPusherListener";
 import PusherListenerPresence from "./PusherListenerPresence";
 import { PusherProvider } from "./PusherProvider";
+import Communication from "./Communication";
+import { SocketProvider } from "./SocketProvider";
+import { store } from "@/lib/redux/store";
+import LiveLink from "@/context/LiveLinkContext";
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
-        <PusherProvider>
-          <GlobalPusherListener />
-          <PusherListenerPresence />
-          {children}
-        </PusherProvider>
+        <SocketProvider>
+          <LiveLink>
+            <PusherProvider>
+              <GlobalPusherListener />
+              <PusherListenerPresence />
+              <Communication />
+              {children}
+            </PusherProvider>
+          </LiveLink>
+        </SocketProvider>
       </Provider>
     </QueryClientProvider>
   );

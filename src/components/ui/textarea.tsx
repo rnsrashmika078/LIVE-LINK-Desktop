@@ -7,7 +7,6 @@ import {
   useState,
 } from "react";
 import { MdOutlineEmojiEmotions } from "react-icons/md";
-
 import { CgAttachment } from "react-icons/cg";
 import { BiMicrophone, BiSend } from "react-icons/bi";
 
@@ -40,7 +39,7 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...props}
           rows={row}
           onInput={rows}
-          className="outline-none focus-ring-0 pl-15 pr-15 w-full border border-pattern_2 p-2 rounded-xl custom-scrollbar-y"
+          className="bg-pattern_2  outline-none focus-ring-0 pl-16 pr-16 w-full border border-pattern_2 p-2 rounded-xl custom-scrollbar-y"
         ></textarea>
         <div className="flex gap-2 absolute bottom-2.5 left-2">
           <MdOutlineEmojiEmotions
@@ -66,6 +65,9 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             onClick={() => onClickButton?.("voice")}
           />
         </div>
+        {/* <Button onClick={onClickButton} variant="eco" radius="full">
+          <IoMdSend />
+        </Button> */}
       </div>
     );
   }

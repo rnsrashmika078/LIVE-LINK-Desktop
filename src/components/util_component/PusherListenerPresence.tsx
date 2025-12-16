@@ -2,16 +2,9 @@
 "use client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PusherChatDispatch, PusherChatState } from "@/app/types";
-
-import {
-  setMessages,
-  setMessagesArray,
-  setTypingUsers,
-} from "@/app/lib/redux/chatslicer";
-import { Message } from "@/app/types/index";
 import { usePusher } from "./PusherProvider";
-import { setNotification } from "@/app/lib/redux/notificationSlicer";
+import { DeletedMessage, Message, PusherChatDispatch, PusherChatState, TypingUser } from "@/types";
+import { setDeletedMessage, setMessages, setMessagesArray, setTypingUsers } from "@/lib/redux/chatslicer";
 
 export default function PusherListenerPresence() {
   const dispatch = useDispatch<PusherChatDispatch>();
@@ -34,7 +27,7 @@ export default function PusherListenerPresence() {
       const channelName = `private-message-${chat.chatId}`;
 
       const channel = pusher.subscribe(channelName);
-      channel.bind("client-message", (data: Message) => {
+      channel.bind("client-message", (data: any) => {
         if (data.type === "typing") {
           if (data.senderId === authUser?.uid) return;
           const typeData = {
@@ -42,10 +35,12 @@ export default function PusherListenerPresence() {
             chatId: data.chatId ?? "",
             isTyping: data.isTyping ?? false,
           };
-          dispatch(setTypingUsers(typeData));
+          dispatch(setTypingUsers(typeData as TypingUser));
+        } else if (data.type === "deleting") {
+          dispatch(setDeletedMessage(data as DeletedMessage));
         } else {
-          dispatch(setMessages(data));
-          dispatch(setMessagesArray(data));
+          dispatch(setMessages(data as Message));
+          dispatch(setMessagesArray(data as Message));
         }
       });
       chat_channels[chat.chatId] = channel;

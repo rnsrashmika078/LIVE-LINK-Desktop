@@ -1,0 +1,81 @@
+/* eslint-disable react-hooks/set-state-in-effect */
+"use client";
+import { useEffect, useRef } from "react";
+import { shallowEqual, useSelector } from "react-redux";
+import { useInView } from "framer-motion";
+import React from "react";
+
+import { MdArrowDropDown } from "react-icons/md";
+import { useLiveLink } from "@/context/LiveLinkContext";
+import { Message, PusherChatState } from "@/types";
+import { useMessageSeenAPI } from "@/hooks/useEffectHooks";
+import Spinner from "@/components/ui/spinner";
+import { MessageUI } from "@/components/ui/message";
+
+interface ViewAreaProps extends React.HTMLAttributes<HTMLDivElement> {
+  messages: Message[];
+  state: boolean;
+}
+function MessageViewArea({ messages, state, ...props }: ViewAreaProps) {
+  //states
+  const { setId } = useLiveLink();
+
+  const states = useSelector(
+    (store: PusherChatState) => ({
+      activeChat: store.chat.activeChat,
+      authUser: store.chat.authUser,
+    }),
+    shallowEqual
+  );
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(scrollRef);
+  const lastMessage = messages.at(-1);
+
+  useMessageSeenAPI(
+    isInView,
+    lastMessage!,
+    states.authUser!,
+    states.activeChat!
+  );
+
+  useEffect(() => {
+    if (messages) {
+      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  /**
+   * create a elapsed time ticker
+   * useRef to store createdAt as number
+   * useState to store ElapsedTime as string
+   * useEffect to do the calculation part
+   * setInterval to run the useEffect in each seconds
+   * display the elapsed time ( 01:25 )
+   * use padStart to show the time in two number if the sec or minute it single figure : (0 -> 00) padStart(2,"0")
+   */
+
+  return (
+    <div className="p-5 relative custom-scrollbar-y h-full w-full " {...props}>
+      <Spinner condition={state} />
+
+      {messages
+        .filter((m) => m.chatId === states.activeChat?.chatId)
+        .map((msg, index) => (
+          <div key={index} className=" ">
+            <MessageUI msg={msg} authUser={states.authUser!}>
+              <MdArrowDropDown
+                size={25}
+                onClick={() => {
+                  setId(msg.customId ?? "");
+                }}
+                className="absolute top-0 right-0  flex justify-center hover:opacity-100 opacity-0"
+              />
+            </MessageUI>
+          </div>
+        ))}
+      <div ref={scrollRef}></div>
+    </div>
+  );
+}
+
+export default React.memo(MessageViewArea);

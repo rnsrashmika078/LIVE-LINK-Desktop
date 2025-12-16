@@ -1,6 +1,6 @@
-import Image from "next/image";
+import { PreviewDataType } from "@/types";
 import { Button } from "./button";
-import { PreviewDataType } from "@/app/types";
+
 import React from "react";
 
 interface FileShareProp {
@@ -41,7 +41,7 @@ export const FileShare = React.memo(
                     width={450}
                     height={450}
                     className="object-contain w-[450px] h-[450px]"
-                  ></Image>
+                  ></img>
                 </>
               )}
               {preview?.type === "application/pdf" && (
@@ -65,7 +65,6 @@ export const FileShare = React.memo(
                   </div>
                 </>
               )}
-
             </div>
             <div className="absolute pointer-events-auto right-8 top-18">
               <Button

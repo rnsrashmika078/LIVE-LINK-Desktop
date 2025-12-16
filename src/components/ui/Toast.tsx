@@ -1,6 +1,5 @@
 "use client";
-
-import { PusherChatState } from "@/types";
+import { PusherChatState } from "@/app/types";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";

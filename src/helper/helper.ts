@@ -1,57 +1,70 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export async function apiFetch(
-    route: string,
-    method: "GET" | "POST" | "DELETE" | "PUT",
-    body?: any,
-    routeType: "NATIVE" | "EXTERNAL" = "NATIVE"
+  route: string,
+  method: "GET" | "POST" | "DELETE" | "PUT",
+  body?: any,
+  routeType: "NATIVE" | "EXTERNAL" = "NATIVE"
 ) {
-    const baseUrl = import.meta.env.VITE_API_URL;
+  const url = import.meta.env.VITE_API_URL;
+  let res;
+  if (routeType === "EXTERNAL") {
+    res = await fetch(`${route}`, {
+      method,
+      cache: "no-store",
+      body,
+    });
+  } else {
+    res = await fetch(`${url}${route}`, {
+      method,
+      cache: "no-store",
+      headers: body ? { "Content-Type": "application/json" } : undefined,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  }
 
-    let res;
-    if (routeType === "EXTERNAL") {
-        res = await fetch(`${route}`, {
-            method,
-            cache: "no-store",
-            body,
-        });
-    } else {
-        res = await fetch(`${baseUrl}${route}`, {
-            method,
-            cache: "no-store",
-            headers: body ? { "Content-Type": "application/json" } : undefined,
-            body: body ? JSON.stringify(body) : undefined,
-        });
-    }
-
-    return res;
+  return res;
 }
 
 export function modifiedMessage(input: string): string | null {
-    if (!input) return null;
-    const { url, format, message, name } = JSON.parse(input);
+  if (!input) return null;
+  let msg;
+  try {
+    const parsedMessage =
+      typeof input === "string" ? JSON?.parse(input) : input;
+    const { url, format, message, name } = parsedMessage;
 
     if (url && message) {
-        return message;
+      msg = message;
     } else if (url) {
-        return name + "." + format;
+      msg = name + "." + format;
     } else {
-        return message;
+      msg = message;
     }
+  } catch (err) {
+    console.log(err);
+  }
+
+  return msg;
 }
 
 export function modifiedMessageOnMessageArea(
-    input: string,
-    to: "file" | "message" = "message"
+  input: string,
+  to: "file" | "message" = "message"
 ): string | null {
-    if (!input) return null;
+  if (!input) return null;
 
-    const { message, url } = JSON.parse(input);
+  const { message, url } = JSON.parse(input);
 
-    if (to === "file" && url) {
-        return url;
-    }
-    if (to === "message" && message) {
-        return message;
-    }
-    return null;
+  if (to === "file" && url) {
+    return url;
+  }
+  if (to === "message" && message) {
+    return message;
+  }
+  return null;
 }
+export function elapsedTime(startedAt: number) {
+  const time = new Date();
+  return time;
+}
+//action menu operations functions

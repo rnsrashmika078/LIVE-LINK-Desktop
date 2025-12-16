@@ -23,14 +23,14 @@ interface LiveLinkContextType {
   connectionState: boolean;
 
   //refs
-  localAudioRef: React.RefObject<HTMLAudioElement | null>;
-  remoteAudioRef: React.RefObject<HTMLAudioElement | null>;
-  pcRef: React.RefObject<RTCPeerConnection | null>;
-  channelRef: React.RefObject<any>;
-  pendingCandidatesRef: React.RefObject<RTCIceCandidateInit[]>;
-  sdpRef: React.RefObject<RTCSessionDescriptionInit | null>;
-  currentPC: React.RefObject<RTCPeerConnection | null>;
-  audioRef: React.RefObject<HTMLAudioElement | null>;
+  localAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  remoteAudioRef: React.MutableRefObject<HTMLAudioElement | null>;
+  pcRef: React.MutableRefObject<RTCPeerConnection | null>;
+  channelRef: React.MutableRefObject<any>;
+  pendingCandidatesRef: React.MutableRefObject<RTCIceCandidateInit[]>;
+  sdpRef: React.MutableRefObject<RTCSessionDescriptionInit | null>;
+  currentPC: React.MutableRefObject<RTCPeerConnection | null>;
+  audioRef: React.MutableRefObject<HTMLAudioElement | null>;
 
   //has incoming call
   setSessionInfo: (data: SessionInfo | null) => void;
@@ -52,13 +52,13 @@ export const LiveLink = ({ children }: { children: ReactNode }) => {
   );
 
   const pendingCandidatesRef = useRef<RTCIceCandidateInit[]>([]);
-  const localAudioRef = useRef<HTMLAudioElement>(null);
-  const remoteAudioRef = useRef<HTMLAudioElement>(null);
-  const pcRef = useRef<RTCPeerConnection>(null);
-  const currentPC = useRef<RTCPeerConnection>(null);
-  const channelRef = useRef<any>(null);
+  const localAudioRef = useRef<HTMLAudioElement | null>(null);
+  const remoteAudioRef = useRef<HTMLAudioElement | null>(null);
+  const pcRef = useRef<RTCPeerConnection | null>(null);
+  const currentPC = useRef<RTCPeerConnection | null>(null);
+  const channelRef = useRef<any | null>(null);
   const sdpRef = useRef<RTCSessionDescriptionInit | null>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   return (
     <LiveLinkContext.Provider

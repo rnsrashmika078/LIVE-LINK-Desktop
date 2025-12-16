@@ -2,26 +2,14 @@
 "use client";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  AuthUser,
-  ChatsType,
-  PusherChatDispatch,
-  PusherChatState,
-} from "@/app/types";
-import { setNotification } from "@/app/lib/redux/notificationSlicer";
-import {
-  setFriendRequest,
-  setFriends,
-  setJoinedUser,
-  setLeftUser,
-  setOnlineUsers,
-} from "@/app/lib/redux/friendsSlicer";
-import {
-  setChats,
-  setChatsArray,
-  setMessageSeen,
-} from "@/app/lib/redux/chatslicer";
+
+
+
 import { usePusher } from "./PusherProvider";
+import { AuthUser, ChatsType, PusherChatDispatch, PusherChatState } from "@/types";
+import { setChats, setChatsArray, setMessageSeen } from "@/lib/redux/chatslicer";
+import { setNotification } from "@/lib/redux/notificationSlicer";
+import { setFriendRequest, setFriends, setJoinedUser, setLeftUser, setOnlineUsers } from "@/lib/redux/friendsSlicer";
 
 export default function GlobalPusherListener() {
   const dispatch = useDispatch<PusherChatDispatch>();
