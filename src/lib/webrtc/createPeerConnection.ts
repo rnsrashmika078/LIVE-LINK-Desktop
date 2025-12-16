@@ -18,6 +18,7 @@ export const createPeerConnection = async (
     !data.localAudioRef?.current ||
     !data.remoteAudioRef?.current
   ) {
+    console.log("Yeah , data not there!");
     return null;
   }
 

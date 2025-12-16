@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/immutability */
-"use client";
+;
 import { useState, useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { useSocket } from "./SocketProvider";

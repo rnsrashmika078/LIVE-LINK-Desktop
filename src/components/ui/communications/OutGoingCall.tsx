@@ -1,6 +1,3 @@
-/* eslint-disable react-hooks/purity */
-/* eslint-disable react-hooks/set-state-in-effect */
-/* eslint-disable react-hooks/refs */
 import { useEffect, useState } from "react";
 import Avatar from "../avatar";
 import { shallowEqual, useSelector } from "react-redux";
@@ -98,7 +95,7 @@ const OutGoingCall = () => {
 
   const elapsedTime = useElapsedTime(sessionInfo?.callStatus === "Connected");
 
-  if (clickedIcon !== "audio") return;
+ 
 
   return (
     <div className=" z-[9999] bg-gray-900 right-5 top-5 rounded-xl border border-gray-800 shadow-sm h-[300px] w-[250px]  absolute">

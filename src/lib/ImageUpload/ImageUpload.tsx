@@ -1,4 +1,4 @@
-"use Client";
+;
 import React, { SetStateAction, useEffect } from "react";
 import { useState } from "react";
 import Icons from "../Common/Icons";

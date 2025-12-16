@@ -1,4 +1,4 @@
-"use client";
+;
 import { EndItems, MiddleItems, StartItems } from "../../util/data";
 import { useDispatch, useSelector } from "react-redux";
 import { PusherChatDispatch, PusherChatState } from "../../types";

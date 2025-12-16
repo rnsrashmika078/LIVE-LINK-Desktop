@@ -1,4 +1,4 @@
-"use client";
+;
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";

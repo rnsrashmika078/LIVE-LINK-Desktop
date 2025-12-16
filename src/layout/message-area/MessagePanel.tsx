@@ -283,9 +283,11 @@ const MessagePanel = () => {
               onDragLeave={onDragLeave}
             />
           </Suspense>
-          <Suspense fallback={null}>
-            <OutGoingCall />
-          </Suspense>
+          {clickedIcon === "audio" && (
+            <Suspense fallback={null}>
+              <OutGoingCall />
+            </Suspense>
+          )}
           <div className="flex flex-col gap-5 mt-auto w-full p-2 place-items-start ">
             <TypingIndicator
               isUserTyping={isUserTyping}

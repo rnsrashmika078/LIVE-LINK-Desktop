@@ -2,6 +2,9 @@ import { ReactNode, Suspense, useState } from "react";
 import Sidebar from "./sidebar/Sidebar";
 import { NewChat } from "@/components/modal/NewChat";
 import MessageParent from "./message-area/MessageParent";
+import React from "react";
+
+const IncomingCall = React.lazy(() => import("@/components/ui/communications/IncomingCall"))
 const MainLayout = ({ children }: { children: ReactNode }) => {
   const [openModal, setOpenModal] = useState<boolean>(false);
 
@@ -17,7 +20,9 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
       </Suspense>
       <div className=" "> </div>
       {children}
-      {/* chat info section */}
+      <Suspense fallback={<div>{null}</div>}>
+        <IncomingCall />
+      </Suspense>
       <MessageParent />
     </div>
   );

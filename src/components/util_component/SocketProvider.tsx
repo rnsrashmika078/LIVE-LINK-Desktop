@@ -1,6 +1,4 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-"use client";
-
 import {
   createContext,
   useContext,
@@ -18,28 +16,27 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const authUser = useSelector((store: PusherChatState) => store.chat.authUser);
 
-  // Ensure server is initialized before connecting
-  useEffect(() => {
-    fetch("/api/socket").catch(console.error);
-  }, []);
+  const path = import.meta.env.VITE_API_URL!;
+
 
   // Connect socket once authUser.uid is available
   useEffect(() => {
     if (!authUser?.uid) return;
 
-    const socketInstance = io({
-      path: "/api/socket",
+    const socketInstance = io(path, {
+      path: "/api/socket", 
       transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
     });
 
     socketInstance.on("connect", () => {
-
-      // ✅ JOIN ROOM: Immediately join personal room after connection
       socketInstance.emit("join-room", authUser.uid);
     });
 
-    // ✅ LISTEN: For room joined confirmation
     socketInstance.on("room-joined", (data) => {
+      console.log("success");
     });
 
     socketInstance.on("connect_error", (err) => {

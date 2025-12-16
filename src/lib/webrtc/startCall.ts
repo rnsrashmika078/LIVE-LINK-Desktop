@@ -34,7 +34,10 @@ export const startCall = async (data: SessionInfo) => {
       remoteAudioRef: data.remoteAudioRef,
     });
 
-    if (!pc) return;
+    if (!pc) {
+
+      return;
+    }
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
 

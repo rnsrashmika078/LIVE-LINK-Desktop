@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 import Avatar from "../avatar";
 import { shallowEqual, useSelector } from "react-redux";
-import { PusherChatState } from "@/app/types";
-import { MdCall, MdCallEnd } from "react-icons/md";
-import { useLiveLink } from "@/app/context/LiveLinkContext";
-import { useSocket } from "../../util_component/SocketProvider";
+import { useLiveLink } from "@/context/LiveLinkContext";
+import { useSocket } from "@/components/util_component/SocketProvider";
+import { PusherChatState } from "@/types";
+import { cleanupConnection } from "@/lib/webrtc/cleanupConnection";
+import { endCall } from "@/lib/webrtc/endCall";
+import { useElapsedTime } from "@/hooks/useHooks";
 import { BsMic, BsMicMute } from "react-icons/bs";
-import { endCall } from "@/app/lib/webrtc/endCall";
-import { cleanupConnection } from "@/app/lib/webrtc/cleanupConnection";
-import { useElapsedTime } from "@/app/hooks/useHooks";
+import { MdCall, MdCallEnd } from "react-icons/md";
 
 const IncomingCall = () => {
   const {
@@ -41,10 +41,6 @@ const IncomingCall = () => {
       }
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer);
-      // if (pc.signalingState !== "have-remote-offer") {
-      //   console.warn("Cannot create answer in state:", pc.signalingState);
-      //   return;
-      // }
 
       socket?.emit("call-answer", {
         // callFrom: authUser?.uid,

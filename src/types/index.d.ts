@@ -17,10 +17,10 @@ export type SessionInfo = {
   callEndBy?: string | null;
   sdp?: RTCSessionDescriptionInit | null;
   candidate?: RTCIceCandidateInit | null;
-  localAudioRef?: React.RefObject<HTMLAudioElement | null>;
-  pendingCandidatesRef?: React.RefObject<RTCIceCandidateInit[]>;
-  remoteAudioRef?: React.RefObject<HTMLAudioElement | null>;
-  pcRef?: React.RefObject<RTCPeerConnection | null>;
+  localAudioRef?: React.MutableRefObject<HTMLAudioElement | null>;
+  pendingCandidatesRef?: React.MutableRefObject<RTCIceCandidateInit[]>;
+  remoteAudioRef?: React.MutableRefObject<HTMLAudioElement | null>;
+  pcRef?: React.MutableRefObject<RTCPeerConnection | null>;
   socket?: Socket | null;
 };
 export type SessionInfoSerialize = {

@@ -1,4 +1,4 @@
-"use client";
+;
 import { AnimatePresence, motion } from "framer-motion";
 import React, { Suspense, useState } from "react";
 import { TbReportSearch } from "react-icons/tb";
